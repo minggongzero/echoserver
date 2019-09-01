@@ -10,6 +10,7 @@
 #include <cstring>
 #include <signal.h>
 #include <poll.h>
+#include <fcntl.h>
 #include "myecho.h"
 
 #define ERR_EXIT(m) \
@@ -111,10 +112,10 @@ void handler(int sig)
 int setnonblock(int sock)
 {
 	int arg;
-	int ret = fcntl(sock, F_GETCL, &arg);
+	int ret = fcntl(sock, F_GETFL, &arg);
 	if(ret == -1) ERR_EXIT("fcntl");
 	arg |= O_NONBLOCK;
-	ret = fcntl(sock, F_SETCL, &arg);
+	ret = fcntl(sock, F_SETFL, &arg);
 	if(ret == -1) ERR_EXIT("fcntl");
 	return 0;
 }
